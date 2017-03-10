@@ -1,0 +1,24 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login Page</title>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}" />
+</head>
+<body>
+
+    <div sec:authorize="isAuthenticated()">
+        <form id="logoutForm" method="POST" th:action="@{/logout}"></form>
+        <h2>Hello </h2>
+        <div>
+            Username : <span sec:authentication="name">유저</span>
+        </div>
+        <div>
+            권한 : <span sec:authentication="principal.authorities">권한</span>
+        </div>
+        <div>
+            <a onclick="document.forms['logoutForm'].submit()" class="button1">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

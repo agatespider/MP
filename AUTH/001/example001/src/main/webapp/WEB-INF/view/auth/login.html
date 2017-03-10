@@ -1,0 +1,50 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Login Page</title>
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/style.css}" />
+</head>
+<body>
+    <div id="login-main" class="login-main">
+        <h1>Login Page</h1>
+        <div th:if="${param.error}" class="alert-error">
+            아이디 패스워드를 확인 해주세요
+        </div>
+        <div th:if="${param.logout}" class="alert-error">
+            로그아웃에 성공했습니다.
+        </div>
+        <form name="loginForm" th:action="@{/auth/login}" method="post">
+        <div class="field-box">
+            <div class="id">
+                <div class="label">id :</div>
+                <input type="text" id="username" name="username"/>
+            </div>
+            <div class="pw">
+                <div class="label">password :</div>
+                <input type="password" id="password" name="password"/>
+            </div>
+        </div>
+        <div class="btn">
+            <a class="button1" v-on:click="login">login</a>
+            <a class="button1" v-on:click="goRegister">register</a>
+        </div>
+        </form>
+    </div>
+
+    <script type="text/javascript" src="https://unpkg.com/vue"></script>
+    <script>
+        var login = new Vue({
+            el: '#login-main',
+            methods: {
+                login: function() {
+                    document.forms['loginForm'].submit();
+                },
+                goRegister: function() {
+                    location.href = '/auth/regist';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

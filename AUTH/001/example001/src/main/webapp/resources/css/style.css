@@ -1,0 +1,85 @@
+/**
+    login page
+**/
+.login-main {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+.login-main h1{
+    font-size: 30px
+}
+
+.login-main .field-box{
+    margin-bottom: 10px
+}
+.login-main .field-box:after{
+    content: '';
+    display: block;
+    clear: both
+}
+
+.login-main .id{
+    margin-bottom: 10px;
+    text-align: right;
+}
+.login-main .id .label{
+    width:100px;
+    float:left;
+    text-align:right;
+    font-size: 14px
+}
+
+.login-main .pw .label{
+    width:100px;
+    float:left;
+    text-align:right;
+    font-size: 14px
+}
+.login-main .pw{
+    margin-bottom: 10px;
+    text-align: right
+}
+
+.login-main .email .label{
+    width:100px;
+    float:left;
+    text-align:right;
+    font-size: 14px
+}
+.login-main .email{
+    margin-bottom: 10px;
+    text-align: right
+}
+
+.login-main .btn {
+    text-align: right;
+}
+
+.login-main .alert-error {
+    font-size: 14px;
+    color: #7a0001;
+    margin-bottom: 20px
+}
+
+.login-main .alert-error {
+    font-size: 14px;
+    color: #1f43c8;
+    margin-bottom: 20px
+}
+
+.button1 {
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    padding: 8px 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    cursor: pointer;
+}
+.button1:hover{
+    background-color: #00b2ed;
+}
