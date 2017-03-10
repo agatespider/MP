@@ -4,5 +4,5 @@
 # 목차
 
 ## 001
-Spring Boot + Spring Security + Jpa를 통한 id, password비교 인증
+Spring Boot + Spring Security + Jpa를 통한 id, password비교 인증 및 가입
 
