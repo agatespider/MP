@@ -1,4 +1,4 @@
-# 웹 기산 시스템 성능 개선
+# 웹 기반 시스템 성능 개선 및 모니터링
 
 
 # 1. 화면 컨텐츠 구성 체크
@@ -175,6 +175,51 @@ File Descriptor는 프로세스 단위로 갯수 제약이 있어서 한계에 �
 File Descriptor는 [여기](http://dev-ahn.tistory.com/96)를 참고 하기 바란다.   
     
 
+## 1.6 웹서버 모니터링
+웹서버는 보통 요청 URL에 대한 처리시간을 Access.log에 남기는 기능이 있다. 이 로그를 사용해서 웹서버에 문제가 있었는지, 어플리케이션 서버에 문제가 있었는지 추측을 할 수 있다.
 
+어플리케이션 서버에 문제가 있었다면 해당 서버에서 서비스하는 URI에 집중적으로 성능 저하나 5xx HTTP응답 코드가 나타난다.
+웹서버에 문제가 있다면 정적 컨텐츠까지 무작위로 느려지게 되므로 구분 할 수 있다. 주의점은 application 서버 지연으로 웹 서버에서 큐잉이 발생한다면 정적컨텐츠까지 지연이 된다는 점이다.
 
+### 1.6.1 nginx log 설정
 
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for" "gzip_ratio" $request_time';
+    
+    access_log  logs/access.log  main;
+
+여러개의 로그 포맷을 지정하는 설정들이 있는데 마지막 $request_time을 주의깊게 봐야한다. 이것은 클라이언트에서 첫 바이트를 받은 후부터 웹 서버가 마지막 바이트를 내려보낸 때까지의 내부 프로세싱 시간을 뜻한다.
+그리고 이것은 1.234초처럼 밀리초가 포함된 초단위로 출력이 된다.
+
+$connection_requests옵션을 추가하면 동일한 네트워크 연결에서 처리된 요청 순서를 번호로 남겨서 한 연결에서 몇개의 요청을 처리 햇는지 알 수도 있다.
+
+log_format의 세부 정보는 [여기](http://nginx.org/en/docs/http/ngx_http_log_module.html)에서 확인 하길 바란다.
+
+### 1.6.2 nginx 기본 제공 모니터링 화면
+nginx는 현재 nginx의 상태를 보여주는 기본 화면을 제공한다. 하지만 사용하기 위해선 간단한 설정을 해줘야 한다.
+
+    nginx.conf
+    server{
+        # status 추가
+        location /nginx_status {
+            stub_status on;
+            allow all;  # 접속을 허락하는 IP 설정
+            deny all;   # 접근을 거부할 IP 설정 위에 allow를 먼저 선언햇으므로 있으나 마나하다
+        }
+    }
+
+    -----------------------------------------------------------------------------------
+    localhost/nginx_status 출력화면
+    
+    Active connections: 2               <-- 오픈된 네트워크 연결 수(사용자수 아님) 
+    server accepts handled requests
+     42 42 27                           <-- Accepted 총 연결수, Handled 총 연결수, 총 요청수
+    Reading: 0 Writing: 1 Waiting: 1    
+    
+    Reading: 요청 헤더 정보를 읽고 있는 연결 수
+    Writing: 요청 본문을 읽거나 프로세싱 또는 응답을 쓰고 있는 상태
+    Waiting: keepalive 상태인 연결 수
+    Active connections = Reading + Writing + Waiting 
+    
+    
