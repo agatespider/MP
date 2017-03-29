@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="rj3/rj3.js"></script>
+    <script src="rj3/pathFromFunction.js"></script>
+    <script>
+        var arrData = [
+            [10, 130],
+            [100, 60],
+            [190, 160],
+            [280, 10]
+        ];
+
+        console.log(+"1234");   //
+        console.log("1234");    //문자
+
+        console.log(typeof +"1234" === "number");
+
+        var svgline = rj3.svg.line()
+            .x(function(point){
+                console.log("call X")
+                return point[0];
+            }).y(function(point) {
+                console.log("call Y");
+                return point[1];
+            });
+        console.log(svgline(arrData))
+    </script>
+</head>
+<body>
+
+</body>
+</html>
