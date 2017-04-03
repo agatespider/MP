@@ -10,6 +10,7 @@
 
 
 // createReservation기능중 it에 선언된 기능이 동작하는지 테스트 한다.
+console.log(window.describe);
 describe('createReservation(passenger, flight)', function() {
     var testFlight = null,
         testFlight = null,
@@ -41,7 +42,7 @@ describe('createReservation(passenger, flight)', function() {
     });
 
     it('인자 testFlight를 flightInfo property에 할당한다.', function() {
-        expect(testReservation.flightInfo).toBe(testFlight);
+        expect(testReservation.flightInfo).toBe(testPassenger);
     });
 
     it('flightInfo Property는 passenger값과 틀려야 한다.', function() {

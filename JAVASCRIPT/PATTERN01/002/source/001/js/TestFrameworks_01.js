@@ -10,7 +10,7 @@
  * @returns {{passengerInfo: *, flightInfo: *}}
  */
 function createReservation(passenger, flight, reservationSaver) {
-
+    window.describe = function() {return 'test'};
     var reservationInfo = {
         passengerInfo: passenger,
         flightInfo: flight
@@ -27,6 +27,7 @@ function createReservation(passenger, flight, reservationSaver) {
  * @constructor
  */
 function ReservationSaver() {
+
     return {
         saveReservation: function(reservationInfo) {
             console.log(reservationInfo);

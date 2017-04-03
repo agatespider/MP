@@ -1,0 +1,58 @@
+.kjtt{
+    background-color: #eee;
+    padding: 5px;
+    margin: -8px;
+    font-size: 11px;
+    font-family: Monaco, "Lucida Console", monospace;
+    line-height: 14px;
+    color: #333
+}
+
+.kjtt-state{
+    background-color: #007069;
+    padding: 5px;
+    margin: -8px;
+    font-size: 12px;
+    font-family: Monaco, "Lucida Console", monospace;
+    font-weight: bold;
+    line-height: 14px;
+    color: #FFFFFF;
+    line-height: 40px
+}
+
+.kjtt-result{
+    background-color: #eee;
+    font-size: 11px;
+    font-family: Monaco, "Lucida Console", monospace;
+    line-height: 14px;
+    color: #333
+}
+
+.kjtt-result ul{
+    list-style: none;
+}
+
+.kjtt-result .result-main{
+    font-size: 12px;
+    font-weight: bold
+}
+
+.kjtt-result .result-sub{
+    margin-left: 14px;
+}
+.kjtt-result .result-sub a{
+    text-decoration: none;
+    color: #007069;
+}
+
+.result-success{
+    background-color: #eee;
+    padding: 5px;
+    margin: -8px;
+    font-size: 11px;
+    font-family: Monaco, "Lucida Console", monospace;
+    line-height: 14px;
+    color: #333;
+}
+
+

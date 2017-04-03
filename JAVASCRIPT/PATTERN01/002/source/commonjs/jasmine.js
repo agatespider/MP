@@ -517,6 +517,7 @@ getJasmineRequireObj().Env = function(j$) {
     options = options || {};
 
     var self = this;
+    console.log(this);
     var global = options.global || j$.getGlobal();
 
     var totalSpecsDefined = 0;
