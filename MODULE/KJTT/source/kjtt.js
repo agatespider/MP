@@ -19,10 +19,8 @@ var getKjttModule = (function(kjttGlobal){
 
     getKjttRequireModule().core = function(requiredModule){
         var kjtt$ = {};
-        kjtt$.proof = requiredModule.proof();
         kjtt$.renderHtml = requiredModule.renderHtml();
         kjtt$.env = requiredModule.env(kjtt$);
-
 
         return kjtt$;
     }
@@ -30,18 +28,7 @@ var getKjttModule = (function(kjttGlobal){
     return getKjttRequireModule;
 })(this);
 
-// 중요
-getKjttModule().proof = function(){
-    return function() {
-        return {
-            같아: function(source, target){
-                return source === target;
-            }
-        }
-    }
-};
-
-getKjttModule().renderHtml = function() {
+getKjttModule().renderHtml = function(){
     function render() {
 
     }
@@ -50,7 +37,7 @@ getKjttModule().renderHtml = function() {
 };
 
 // 환경
-getKjttModule().env = function(kjtt$) {
+getKjttModule().env = function(kjtt$){
     function Env() {
         var self = this;
 
@@ -74,6 +61,12 @@ getKjttModule().env = function(kjtt$) {
 
             }
         };
+
+        self.틀려 = function(source, target ){
+
+        };
+
+
 
         self.execute = function() {
             for(var i = 0; i < self.testObj.length; i++) {
@@ -106,12 +99,12 @@ getKjttModule().env = function(kjtt$) {
     kjtt.renderHtml();
     extend(window, new kjtt.env());
 
-    function sum(a, b) {
+    function sum(a, b){
         return a + b;
     }
 
     // 실행 코드 - start
-    테스트('sum 함수를 테스트 할꺼야', function() {
+    테스트('sum 함수를 테스트 할꺼야', function(){
         var v1 = 1,
             v2 = 2,
             v3 = sum(v1, v2);
@@ -124,13 +117,13 @@ getKjttModule().env = function(kjtt$) {
 
     execute();
 
-    function extend(destination, source) {
+    function extend(destination, source){
         for (var property in source) destination[property] = source[property];
         return destination;
     }
 }());
 
-function extend(destination, source) {
+function extend(destination, source){
     for (var property in source) destination[property] = source[property];
     return destination;
 }
