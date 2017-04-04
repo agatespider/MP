@@ -5,19 +5,20 @@
 ## 목차
 
 ### 1. 인증
-AUTH : 인증과 연관된 정보
+AUTH : 인증과 연관된 코드
 
 ### 2. 성능
-PERFORMANCE : [성능 정리](https://github.com/agatespider/MP/tree/master/PERFORMANCE)
+[성능 정리](https://github.com/agatespider/MP/tree/master/PERFORMANCE)
 
 ### 3. JAVASCRIPT
-PATTERN :  
+[첫번째패턴](https://github.com/agatespider/MP/tree/master/JAVASCRIPT/PATTERN01)
 
 ### 4. MODULE
 
 ### 5. MONGODB
+[몽고디비](https://github.com/agatespider/MP/tree/master/MONGODB) 
 
 ### 6. D3
 
 ### 7. IDE Tools
-
+[WebStorm](https://github.com/agatespider/MP/tree/master/IDE/WEBSTORM)
