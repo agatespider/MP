@@ -1,5 +1,5 @@
 # MP
-개인적 공부를 위해 모듈단위의 기능을 정리 해놓은 곳.
+개인적 공부를 위해 모듈단위의 기능을 정리 해놓은 곳. 책에서 있는 자료를 고대로 쓴 것도 많기 때문에 제발 퍼가거나 공유는 하지 말아주시기 바랍니다.
 
 ## 목차
 
@@ -24,4 +24,7 @@
 ### 6. D3
 
 ### 7. IDE Tools
+
 1. [WebStorm](https://github.com/agatespider/MP/tree/master/IDE/WEBSTORM)
+
+
