@@ -55,6 +55,7 @@ Document란 무엇이냐면 아래와 같은 형태의 데이터를 뜻합니다
 
 1. [몽고디비설치](https://github.com/agatespider/MP/tree/master/MONGODB/001)
 2. [몽고쉘](https://github.com/agatespider/MP/tree/master/MONGODB/002)
+3. [데이터모델](https://github.com/agatespider/MP/tree/master/MONGODB/003)
     
 ## 정리    
 간략하게 몽고디비란 무엇인지 알아보았습니다. 다음은 세부적인 각단계를 세부단계 목록을 통해서 알아가

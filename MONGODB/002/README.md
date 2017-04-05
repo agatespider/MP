@@ -2,6 +2,8 @@
 
 * 개요
 * 몽고쉘이란?
+* .mongorc.js 파일
+* 몽고쉘 사용
 * 정리
 
 ## 개요
@@ -33,7 +35,33 @@ mongo명령어를 통해서 몽고디비와 연결을 했으면 쉘을 실행 �
 
 https://docs.mongodb.com/manual/mongo/ 이거 보면서 정리중
      
-     
+## 몽고쉘 사용
+db라는 명령어를 통해서 db 리스트를 출력할 수 있습니다. 
 
+    >db
+    test
+
+DB를 사용하시려면 use <DB명>을 입력하시면 됩니다.
+    
+    > use test
+    switched to db test
+    
+use <db명>을 사용하지 않고 db.getSibling('<db명>')을 사용해서 db에 연결을 할 수 있습니다.
+
+use <db명>은 db가 존재하지 않으면 새롭게 db를 생성합니다. 아래는 use <db명>을 사용해서 디비를 새로 생성하고 mycollection에 데이터를 하나 넣는 코드입니다.  
+    
+    > use mydatabase
+    switched to db mydatabase
+    > db
+    mydatabase
+    > db.mycollection.insertOne({x:1});
+    {
+            "acknowledged" : true,
+            "insertedId" : ObjectId("58e47617a51446e58146606a")
+    }
+    
+db는 현재 사용주인 db를 뜻합니다. 그리고 mycollection은 collection의 이름일 뿐입니다. 이것 또한 존재하지 않으면 사용하는 순간 새로 생성이 됩니다.
+   
+        
 ## 정리    
 
