@@ -54,7 +54,8 @@ Document란 무엇이냐면 아래와 같은 형태의 데이터를 뜻합니다
 ## 세부목차
 
 1. [몽고디비설치](https://github.com/agatespider/MP/tree/master/MONGODB/001)
-2. [Database와 Collection](https://github.com/agatespider/MP/tree/master/MONGODB/003)
+2. [Database와 Collection](https://github.com/agatespider/MP/tree/master/MONGODB/002)
+3. [Capped Collection](https://github.com/agatespider/MP/tree/master/MONGODB/003)
 10. [몽고쉘](https://github.com/agatespider/MP/tree/master/MONGODB/002)
     
 ## 정리    

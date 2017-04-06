@@ -7,6 +7,7 @@
 * View와 collection
 * 공개 뷰 정의
 * 뷰삭제
+* aggregation pipeline이란
 * 정리
 
 ## 개요
@@ -74,7 +75,7 @@ View는 다음과 같은 작업을 지원하지 않습니다.
 
     db.collection.mapReduce()
     $text
-    geoNear 명령어와 $geoNear pipeline 단계
+    geoNear 명령어와 $geoNear pipeline
 
 먄악 View를 만드는 aggregation pipeline이 _id필드를 표시하지 않으면 View의 Document에도 _id필드가 존재 하지 않습니다.
 
