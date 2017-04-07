@@ -21,6 +21,7 @@ IDE란 Integration Develoment Enviromenet의 약자로써 개발 통합 환경�
     Ctrl+Shift+방향키 : 캐럿이 위치해있는 단어를 중심으로 블록을 잡는다.
     Alt+HomeKey : 지금 수정중인 소스파일의 위치를 보여준다.(View메뉴의 Navigation Bar)
     Ctrl+Shift+/ : 블럭단위 주석
+    Ctrl+F3 : 블록한 단어의 다음 단어를 찾아간다.
 
 ## 정리
 WebStorm을 간략히 설명을 했으며 유용한 단축키들을 정리를 했습니다.
