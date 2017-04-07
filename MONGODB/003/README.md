@@ -77,3 +77,9 @@ linux나 unix의 tail -f 명령어처럼 이 tailable cursor는 capped collectio
 만약 새로운 document가 capped collection에 삽입이 되면 tailable cursor를 사용해서 새로 추가된 document를 검색 할 수 있습니다.
         
 ## 정리
+
+capped collection에 관해서 알아보았습니다. 고정형사이즈에 자동으로 index를 걸어주며 특징은 큐처럼 삽입한 데이터를 순서대로 출력할때 가장 빠른 성능을 보입니다.
+
+아마도 큐처럼 사용하기 위해서 만들었나? 생각이 듭니다.
+
+다음장은 Document에 관해서 설명하도록 하겠습니다.
