@@ -122,9 +122,38 @@ name field의 first에 접근하려면 "name.first"를 사용할 수 있으며 "
 ## 제한사항
   
 ### Document 사이즈 제한
+DSON Document size는 최대 16MB까지 지원을 합니다.
+
+size제한이 있는 이유는 과도한 양의 RAM을 사용할 수 없도록 하거나 전송 중에 과도한 대역폭을 사용할 수 없게 하기 위해서입니다.
+
+만약에 16MB이상의 Document를 생성해야 한다면 GridFS API를 사용해야 합니다. GridFS의 자세한내용은 [여기](만약에 16MB이상의 Document를 생성해야 한다면 GridFS API를 사용해야 합니다. GridFS의 자세한내용은 
+)를 참고하시기 바랍니다.
 
 ### Document field  순서
+몽고디비는 아래와 같은 경우를 제외하고 입력한 순서에 따라 Document의 field 순서를 유지합니다.
+ 
+    1. _id field는 항상 Document의 첫번째 필드입니다.
+    2. field 이름을 변경할 경우 field의 순서가 변경이 될 수 있습니다.
+    3. 몽고디비 2.6이상부터는 field의 순서를 최대한 보존하려고 시도를 합니다. 이전버전을 제멋대로였습니다.
 
 ### _id field        
+몽고디비의 collection에 저장된 각 문서는 기본키 역할을 하는 _id field가 필요합니다. 삽입된 문서가 _id field가 존재하지 않는다면 몽고디비 드라이버에서 알아서 _id field 값을 넣어줍니다. 넣어주는 값은 ObjectId입니다. 이것은 수정시 옵션을 upsert:true로 줘서 삽입된 문서에도 적용이 됩니다.
+ 
+upsert란 update의 옵션이며 upsert가 true일때 update조건에 맞는 document가 하나도 존재하지 않을 경우 새로 document를 생성합니다.
+
+_id field는 몇몇의 제약사항이 있습니다.
+
+    1. 몽고디비는 기본적으로 _id field를 인덱스 겁니다.
+    2. _id field는 무조건 첫번째 field여야 합니다.
+    3. _id field는 array가 아닌 BSON의 데이터를 가질 수 있습니다.
+    4. _id field가 첫번째에 존재하지 않는 Document를 받으면 몽고디비가 알아서 첫번째 필드로 이동시킵니다.
+    
+만약에 몽고디비의 복제기능을 이용하려면 _id필드에 BSON 정규표현식을 넣으면 안됩니다. (중요)
+    
+아래는 _id field를 사용하는 방법입니다.
+
+    1. ObjectId를 사용하기를 바랍니다.
+    2. natural unique identifier를 사용하면 공간을 절약하고 추가 색인을 피할 수 있습니다.
+    
         
 ## 정리
