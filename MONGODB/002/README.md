@@ -2,6 +2,7 @@
 
 * 개요
 * Database
+* Collection
 * View
 * View의 특징
 * View와 collection
@@ -16,9 +17,9 @@
 이번장에선 몽고디비에서 말하는 데이터베이스와 콜렉션에 관해서 알아보도록 하겠습니다.
 
 ## Database
-몽고디비는 BSON 문서, 즉 데이터레코드를 DataBase에 존재하는 Collection에 저장합니다.
+몽고디비는 BSON Document, 즉 데이터레코드를 DataBase에 존재하는 Collection에 저장합니다.
 
-몽고디비에서 Database는 document의 collection을 의미합니다. 만약 Database를 사용하려면 아래와 같이 입력 해서 사용할 수 있습니다.
+몽고디비에서 Database는 Document를 가진 Collection들의 집합을 의미합니다. 데이터베이스는 아래와 같이 use 명령어를 통해서 사용 할 수 있습니다.
 
     use mydb
     
@@ -30,13 +31,13 @@
     switched to db mynewdb
     > db.mycollection1.insertOne({x:1});
     {
-            "acknowledged" : true,
-            "insertedId" : ObjectId("58e4cb4ca5724ae2c7f5b04d")
+        "acknowledged" : true,
+        "insertedId" : ObjectId("58e4cb4ca5724ae2c7f5b04d")
     }
 
-insertOne()은 mynewdb나 mycollection1이 준비되지 않았을 경우에 자동으로 생성을 해줍니다.
+insertOne()은 mynewdb나 mycollection1이 존재하지 않는 경우에 자동으로 생성을 하고 Document를 삽입합니다.
     
-참고로 데이터베이스 이름에 대한 제한 사항은 [여기](https://docs.mongodb.com/manual/reference/limits/#restrictions-on-db-names)에서 참고 하시길 바랍니다.
+참고로 데이터베이스 이름에 대한 제약 사항은 [여기](https://docs.mongodb.com/manual/reference/limits/#restrictions-on-db-names)에서 참고 하시길 바랍니다.
     
 ## View
 View는 이번 3.4에서 새로 시작중인 기능입니다. View라는 기능은 Collection이나 다른 View에서 읽기전용 View를 생성하는 기능입니다.
@@ -53,16 +54,15 @@ View는 이번 3.4에서 새로 시작중인 기능입니다. View라는 기능�
     db.createView(<view>, <source>, <pipeline>, <collation> )
 
 ## View의 특징
-    
 View는 오직 Read-Only입니다. View에 쓰는 행위는 모두 오류로 칩니다.
 
-View는 collection의 인덱스를 사용합니다.
+View는 근본이 되는 Collection의 Index를 사용합니다.
 
-View는 [$natular](https://docs.mongodb.com/manual/reference/operator/meta/natural/#metaOp._S_natural) sort를 지정할 수 없습니다.
+View는 [$natular](https://docs.mongodb.com/manual/reference/operator/meta/natural/#metaOp._S_natural) sort를 지정할 수 없습니다. (Natular이 먼지 알때 따로 정리)
 
 view의 이름은 변경 할 수 없습니다.
 
-View에 대한 find() 작업은 다음 연산자를 지원하지 않습니다.
+View에 대한 find()작업은 다음 연산자를 지원하지 않습니다.
 
     $
     $elemMatch
@@ -93,7 +93,7 @@ View는 기반이 Collection이 분할되면 view도 분할된것으로 간주�
 
 다른 뷰에서 뷰를 만드는 경우 소스뷰의 데이터 정렬과 다른 데이터 정렬을 지정할 수 없습니다.
 
-$lookup 또는 $graphLookup과 같이 여러기가 포함 된 집계를 수행하는 경우 View의 데이터 정렬이 동일 해야합니다.
+$lookup 또는 $graphLookup과 같이 여러게가 포함 된 집계를 수행하는 경우 View의 데이터 정렬이 동일 해야합니다.
        
 ## 공개뷰 정의
 db.getCollectionInfos() 및 db.getCollectionNames()과 같은 collection을 나열하는 명령에는 출력에 뷰가 포함됩니다.        
