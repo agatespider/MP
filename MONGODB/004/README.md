@@ -10,6 +10,8 @@
   * Document 사이즈 제한
   * Document field  순서
   * _id field
+* Document구조의 다른 용도
+  * Query Filter Document
 * 추가리소스
 * 정리
 
@@ -150,10 +152,58 @@ _id field는 몇몇의 제약사항이 있습니다.
     
 만약에 몽고디비의 복제기능을 이용하려면 _id필드에 BSON 정규표현식을 넣으면 안됩니다. (중요)
     
-아래는 _id field를 사용하는 방법입니다.
+아래는 _id field를 저장하기 위한 공통적인 옵션들입니다.
 
     1. ObjectId를 사용하기를 바랍니다.
     2. natural unique identifier를 사용하면 공간을 절약하고 추가 색인을 피할 수 있습니다.
+    3. auto increment를 사용해서 키를 만드는게 좋습니다.
+    4. UUID를 사용한다면 UUID를 BSON Bindata 타입으로 효율적으로 저장할 수 있습니다.
+    5. 아래와 같은경우 BinData형식의 인덱스 키가 더 효율적으로 색인이 됩니다.
+    5-1. 바이너리 서브타입 값으로 0~7또는 128-135범위에 있고 바이트 배열의 길이가 0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 12, 14, 16, 20, 24 또는 32일때 효율적입니다.
+    6. 드라이버의 BSON UUID 기능을 사용해서 UUID를 생성하세요.
+    7. 대부분의 MongoDB 드라이버 클라이언트는 _id 필드를 포함하고 있고 MongoDB에 삽입 작업을 보내기 전에 ObjectId를 생성합니다. 
+       그러나 클라이언트가 _id 필드없이 Document를 전송하면 mongod는 _id 필드를 추가하고 ObjectId를 생성합니다.    
+
+## Document구조의 다른 용도  
+MongoDB는 데이터 레코드를 정의 할 뿐만 아니라 쿼리 필터, 업데이트 사양 Document 및 인덱스 사양 문서를 포함하여 문서 구조를 사용합니다. (단, 이에 국한되지 않음).
+        
+### Query Filter Document
+Query Filter Document는 레코드를 선택하여 읽기, 업데이트 및 삭제 작업을 위해 질의를 할때 Document형태의 값을 질의 문으로 사용할 수 있는 기능을 명칭합니다. 
+
+<field> : <value>을 사용하여 조건 및 질의하는 쿼리를 지정할 수 있습니다. 즉 아래처럼 검색조건을 Document형태로 할 수 잇다는 의미입니다.
+        
+    {
+      <field1>: <value1>,
+      <field2>: { <operator>: <value> },
+      ...
+    }        
+
+테스트를 하고 싶으시면 아래 항목들을 테스트 해보세요
+
+[Query Documents](https://docs.mongodb.com/manual/tutorial/query-documents/)
+
+[Query on Embedded/Nested Documents](https://docs.mongodb.com/manual/tutorial/query-embedded-documents/)
+
+[Query an Array](https://docs.mongodb.com/manual/tutorial/query-arrays/)
+
+[Query an Array of Embedded Documents](https://docs.mongodb.com/manual/tutorial/query-array-of-documents/)
+
+### Update Specification Documents
+
+Document를 업데이트 연산자 db.collection.update()와 함께 사용하여 특정 항목을 수정 할 수 있다는 의미입니다.
+
+    {
+      <operator1>: { <field1>: <value1>, ... },
+      <operator2>: { <field2>: <value2>, ... },
+      ...
+    }
     
+예제와 테스트는 [여기](https://docs.mongodb.com/manual/tutorial/update-documents/#update-documents-modifiers)에서 해보시면 됩니다.    
+
+### Index Specification Documents
+인덱스 정의는 아래와 같은 형태로 정의를 할 수 있습니다.
+
+    { <field1>: <type1>, <field2>: <type2>, ...  }
         
 ## 정리
+간략하게 Document란 무었인지 알아보았습니다. 도큐먼트와 RDBMS의 차이가 이해가 잘 안가신다면 [여기](https://www.mongodb.com/blog/post/thinking-documents-part-1?jmp=docs&_ga=1.250470982.1308705724.1491310346)를 참고 하세요
