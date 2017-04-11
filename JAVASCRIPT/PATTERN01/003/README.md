@@ -4,12 +4,14 @@
 * 원시형
 * 객체리터널
 * 모듈패턴
+* 모듈패턴 원칙
+* Object 프로토타입과 프로토타입 상속
 * 정리
 
 ## 개요
 
 ## 원시형과 원시형객체
-Javascript의 원시형은 String, Number, Boolean, null, undefined 총 5가지 종류가 있습니다. 그리고 최근에 ECMAScript6에서 새로운 Symbol이 추가가 되었습니다.
+Javascript의 원시형은 String, Number, Boolean, null, undefined, Object 총 6가지 종류가 있습니다. 그리고 최근에 ECMAScript6에서 새로운 Symbol이 추가가 되었습니다.
 
 원시형 변수는 값은 있고 프로퍼티가 없습니다. 그래서 아래와 같은 코드는 에러가 날 것 같지만 이상하게도 문제없이 실행이 됩니다.
 
@@ -63,9 +65,9 @@ Javascript의 원시형은 String, Number, Boolean, null, undefined 총 5가지 
 ## 모듈패턴
 모듈 패턴은 Javascript에서 가장 많이 쓰이는 패턴중 하나입니다. 모듈 패턴은 데이터 숨김이 목적인 함수가 이런 데이터를 접근하고 제어할 수 있는 API를 제공하는 객체를 반환하는 패턴입니다.
 
-이 패턴은 두가지 유형이 있는데 하나는 임의로 함수를 호출하여 생성하는 모듈 또 하나는 선언과 동시에 실행하는 함수에 기반을 둔 모듈입니다.
+이 패턴은 두가지 유형이 있는데 하나는 임의로 함수를 호출하여 생성하는 패턴 또 하나는 선언과 동시에 실행하는 함수에 기반을 둔 패턴입니다.
 
-즉시모듈생성
+임의모듈 생성패턴 - code_01.js
 
     // 해당 어플리케이션에서만 사용할 수 있는 모든 객체(모듈)을 담아 놓은 전역 객체를 선언하여 namespace처럼 활용합니다.
     var FishApp = FishApp || {};
@@ -91,9 +93,42 @@ Javascript의 원시형은 String, Number, Boolean, null, undefined 총 5가지 
     var preserve = FishApp.wildFishSimulator(realFishMaker);
     preserve.addFish('붕어', '붕어계');
 
-이 모듈은 객체리터널을 반환하나 fishMaker같은 의존성을 외부함수에 주입해서 리터널에서 참조하게 만들 수도 있습니다.
+이 모듈은 객체리터널을 반환하나 fishMaker같은 의존성을 외부함수에 주입해서 리터널에서 참조하게 만들 수도 있습니다. 또한 다른 모듈에도 이 모듈을 주입을 할 수 있어서 확장성에도 유리합니다.
 
-다른 모듈에도 이 모듈을 주입을 할 수 있어서 확장성에도 유리합니다.
+즉시모듈 생성패턴 - code_02.js
+
+    FishApp.wildFishSimulator = (function(fishMaker) {
+        // private 변수
+        var fishes = [];
+    
+        // api를 반환
+        return {
+            addFish: function(name, species) {
+                fishes.push(fishMaker.make(name, species));
+            },
+            getFishesCount: function() {
+                return fishes.length;
+            }
+        };
+    }(fishMaker));   //<-- 임의실행 모듈패턴과 다르게 즉시실행 모듈패턴은 이렇게 선언과 동시에 실행이됩니다.
+
+즉시모듈 실행패턴은 임의모듈 실행패턴과 다르게 함수를 해석시에 바로 실행이 되며 특정 변수에 할당이 된 후 해당 모듈의 singleton instance가 됩니다.
+
+## 모듈패턴 원칙
+임의모듈 생성패턴을 사용하던, 즉시모듈 생성패턴을 사용하던 아래 원칙을 꼭 잊지를 말기를 바랍니다.
+
+1. 단일 책임 원칙을 준수하며 최대한 모듈은 한가지의 기능만을 위해 생성해야 합니다.
+
+2. 모듈자신이 사용할 객체가 필요하다면 의존성 주입형태로 사용할 객체를 제공을 하도록 해야 합니다. 또는 팩토리 주입 형태로 주입받아서 제공을 하도록 해야 합니다.
+
+## Object 프로토타입과 프로토타입 상속
+앞에서 작성한 객체리터널은 코드를 해석시에 자동으로 내장객체 Object.prototype에 연결이 됩니다. code_03.js를 보면 실제 chimp객체에 toString이 존재 하지 않지만 오류없이 Object.prototype.toString()메소드를 실행합니다.
+
+오류가 발생하지 않고 실행이 된 이유는 javascript엔진은 chimp.toString() 코드를 실행시에 chimp객체에 toString()이 구현이 되어 있는지 확인하고 존재할경우 해당 toString함수를 호출을 합니다.
+ 
+하지만 존재하지 않는다면 chimp의 prototype(__proto__)안에 toString이 존재하는지 찾아보고 toString을 찾고 이것을 실행합니다. 계속 prototype을 찾아 올라가다 더이상 없으면 undefined를 반환합니다. 
+
+## 정리
 
 
 

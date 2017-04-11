@@ -1,5 +1,5 @@
 # PERFORMANCE
-자바스크립트 패턴과 테스트라는 책의 소스코드를 일일이 다 치고 이해하고 정리 한다.
+자바스크립트 패턴과 테스트라는 책의 소스코드를 일일이 다 치고 이해하고 정리 하려고 합니다.
 
 ## 목차
 1. 001: [D3의 간략 예제와 함께 SOLID, DRY의 개념을 이해한다.](https://github.com/agatespider/MP/tree/master/JAVASCRIPT/PATTERN01/001)
