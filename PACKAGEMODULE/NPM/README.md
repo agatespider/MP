@@ -55,6 +55,5 @@ package는 아래와 같은 정보로 설치를 할 수 있습니다.
 
 2. --save-dev, -D : 패키지를 당신의 devDependencies에 등록합니다.
 
-
 ## 정리    
 
