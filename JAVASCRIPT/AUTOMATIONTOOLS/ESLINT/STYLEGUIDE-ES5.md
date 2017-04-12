@@ -86,42 +86,7 @@
     // good
     var item = {};
     ```
-
-  - [예약어(reserved words)](http://es5.github.io/#x7.6.1)를 키로 사용하지 마십시오. 이것은 IE8에서 동작하지 않습니다. [More info](https://github.com/airbnb/javascript/issues/61)
-
-    ```javascript
-    // bad
-    var superman = {
-      default: { clark: 'kent' },
-      private: true
-    };
-
-    // good
-    var superman = {
-      defaults: { clark: 'kent' },
-      hidden: true
-    };
-    ```
-
-  - 예약어 대신 알기 쉬운 동의어(readable synonyms)를 사용하십시오.
-
-    ```javascript
-    // bad
-    var superman = {
-      class: 'alien'
-    };
-
-    // bad
-    var superman = {
-      klass: 'alien'
-    };
-
-    // good
-    var superman = {
-      type: 'alien'
-    };
-
-    ```
+  
     **[[↑]](#TOC)**
 
 ## <a name='arrays'>Arrays</a> [원문](https://github.com/airbnb/javascript#arrays)
@@ -722,7 +687,7 @@
       this.total = 0;
       return this;
     }
-  ```
+    ```
 
     **[[↑]](#TOC)**
 

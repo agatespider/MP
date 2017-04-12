@@ -15,3 +15,5 @@ console.log(chimp.toString());
 console.log(chimp);
 
 // 만약 chimp안에 toString이 존재할 경우 난 침프입니다라는 문자열을 반환 합니다.
+
+
