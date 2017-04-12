@@ -26,8 +26,3 @@
 ### 7. IDE Tools
 
 1. [WebStorm](https://github.com/agatespider/MP/tree/master/IDE/WEBSTORM)
-
-
-1111
-TEST GIT
-testCode
