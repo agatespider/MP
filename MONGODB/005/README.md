@@ -8,9 +8,9 @@
 ## 개요
 이번장에선 BSON에 대해서 알아보려고 합니다.
 
-BSON이란 MongoDB에서 Document를 저장하고 원격 프로시저를 호출하는데 사용되는 바이너리 직렬화 형태의 데이터 타입을 말합니다.. BSON 사양은 bsonspec.org에서 확인 할 수 있습니다.
+BSON이란 MongoDB에서 Document를 저장하고 원격 프로시저를 호출하는데 사용되는 바이너리 직렬화 형태의 데이터 타입을 말합니다. BSON 사양은 bsonspec.org에서 확인 할 수 있습니다.
 
-BSON은 다음 데이터 유형을 Document의 값으로 지원합니다. 각 데이터 유형에는 $type 연산자로 BSON type별로 Document를 조회하는데 사용할 수 있는 해당 번호와 문자열 alias가 있습니다.
+BSON은 다음 데이터 유형을 Document의 값으로 지원합니다. 각각의 데이터 유형에는 BSON type별로 $type형태의 연산자로 Document를 조회하는데 사용할 수 있도록 각 타입별 문자나 숫자형태의 alias를 가지고 있습니다.
 
 ## 데이터 유형
     

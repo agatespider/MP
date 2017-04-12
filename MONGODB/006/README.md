@@ -2,16 +2,10 @@
 
 * 개요
 * 목차
-* Numeric types
-* String
-* Arrays
-* Date and timestaps
-* 존재하지 않는 fields
-* BinData
 * 정리
 
 ## 개요
-몽고디비는 서로 다른 BSON 유형의 값을 비교할때 아래의 비교 순서를 사용합니다. 이러한 BSON유형의 값에 대해서 상세하게 알아보도록 하겠습니다.
+몽고디비는 서로 다른 BSON 유형의 값을 비교할때 아래와 같은 비교 우선순위를 가집니다. 이러한 BSON유형의 값에 대해서 상세하게 알아보도록 하겠습니다.
 
     1. MinKey(내부 타입)
     2. Null
@@ -31,20 +25,23 @@
 
   1. [Numeric Types](#numerictypes)
   1. [String](#string)
-  1. [Collection](#collation)
   1. [Array](#array)
   1. [Non-existent Fields](#nonexistentfields)
   1. [BinData](#binData)
   
 
 ## <a name='numerictypes'><a name='numerictypes'>Numeric Types</a> 
-몽고디비는 일부 타입을 비교 목적으로 동등하게 취급합니다. 예를 들어 순서 형식은 비교하기 전에 변환됩니다.
+몽고디비는 일부 타입을 비교 목적으로 사용합니다. 예를 들어 numberic 타입은 비교하기 전에 변환됩니다.
 
 ## <a name='string'><a name='string'>String</a> 
-몽고디비는 String을 간단한 바이너리 비교를 사용해서 비교합니다.
 
-## <a name='collation'><a name='collation'>collation</a>
-3.4버전에 새로 생겼습니다. collation을 사용하면 문자 비교 및 악센트 부호 비교등 문자열 비교에 대한 규칙을 설정 할 수 있습니다.
+#### Binary Comparison
+기본적으로 몽고디비는 String을 간단한 바이너리 비교를 사용해서 비교합니다.
+
+#### Collation
+3.4버전에 새로 추가가된 기능입니다. Collation은 항상 문자열 비교를 위해서 language-specific rule을 정의합니다. 예를 들면 대문자와 악센트 Rule을 정의할 수 있습니다.
+
+collation을 사용하면 문자 비교 및 악센트 부호 비교등 문자열 비교에 대한 규칙을 설정 할 수 있습니다.
  
 collaction 구문은 다음과 같습니다.
 
@@ -82,4 +79,6 @@ Array의 소문자 비교나 오름차순 정렬은 배열의 가장 작은 요�
     3. 마지막으로 데이터별로 바이트 단위 비교 수행.
 
 ## 정리
+비교와 sort관련된 설명글인데 비교와 sort예제가 차후에 제공이 되기에 우선 간략한 원론적인 설명만 적었습니다.
 
+차후 예제를 통해서 다시 재정의를 할것이니 이해가 안가시더라도 넘어가시면 됩니다.
