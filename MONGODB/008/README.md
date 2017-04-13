@@ -10,6 +10,7 @@
   1. [Insert a Single Document](#iasd)
   1. [Insert a Multiple Document](#iamd)
   1. [Insert Behiver](#ib)
+  1. [Insert Method](#im)
 
 ## <a name='iasd'><a name='iasd'>Insert a Single Document</a>
 db.collection.insertOne()은 collection에 하나의 document를 삽입합니다.
@@ -61,6 +62,34 @@ db.collection.insertMany() collection안에 여러게의 document들을 삽입 �
 이것은 upsert:true를 사용하는 update 실행에서도 동일하게 동작합니다.
 
 #### Atomicity
+몽고디비 안에서 쓰는 모든 쓰는 작업은 Single Document의 레벨위에서 원자성을 가집니다. 몽고디비의 atomicity에 관해서는 [Atomicity and Transactions](https://docs.mongodb.com/manual/core/write-operations-atomicity/)를 참고하세요.
 
+#### Write Acknowledgement
+Write concerns을 사용하면 몽고디비에서 쓰기 요청에 대한 작업의 보장 레벨을 정할 수 있습니다. [Write Concern](https://docs.mongodb.com/manual/reference/write-concern/)
+ 
+관련항목
 
+  1. [db.collection.insertOne()](https://docs.mongodb.com/manual/reference/method/db.collection.insertOne/#db.collection.insertOne)
+  1. [db.collection.insertMany()](https://docs.mongodb.com/manual/reference/method/db.collection.insertMany/#db.collection.insertMany)
+  1. [Additional Methods for Inserts](https://docs.mongodb.com/manual/reference/insert-methods/#additional-inserts)
+
+## <a name='im'><a name='im'>Insert Method</a>
+몽고디비는 collection안에 document를 저장하는것을 위한 메소드를 다음과 같이 제공합니다.
+ 
+  1. db.collection.insertOne() : single document를 collection에 insert합니다.
+  1. db.collection.insertMany() : multiple document를 collection에 insert합니다.
+  1. db.collectino.insert() : single or multiple document를 collection에 insert합니다.
+
+#### Insert를 위해 추가된 메소드
+다음과 같은 메소드도 Collection에 새로운 Document를 삽입할 수 있습니다.
+ 
+  1. db.collection.update() upsert:true 옵션 사용시 insert합니다.
+  1. db.collection.updateOne() upsert:true 옵션 사용시 insert합니다.
+  1. db.collection.updateMany() upsert:true 옵션 사용시 insert합니다.
+  1. db.collection.findAndModify() upsert:true 옵션 사용시 insert합니다.
+  1. db.collection.findOneAndUpdate() upsert:true 옵션 사용시 insert합니다.
+  1. db.collection.findOneAndReplace() upsert:true 옵션 사용시 insert합니다.
+  1. db.collection.save().
+  1. db.collection.bulkWrite().
+ 
 ## 정리
