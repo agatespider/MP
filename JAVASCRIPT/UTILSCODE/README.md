@@ -3,7 +3,8 @@
 
 ## 목차
 
-
+    001 : 다이나믹 js 추가 코드
+    002 : Date()에 filter prototype추가 코드
 
 ## 정리
 

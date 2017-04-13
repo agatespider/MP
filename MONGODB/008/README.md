@@ -1,4 +1,4 @@
-# 몽고디비 DRUD 연산 - INSERT
+# 몽고디비 CRUD 연산 - INSERT
 
 ## <a name='synopsis'><a name='synopsis'>개요</a>
 이번장에선 몽고디비안에서 insert에 대해서 알아보도록 하겠습니다.

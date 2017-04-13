@@ -71,8 +71,9 @@ Document란 무엇이냐면 아래와 같은 형태의 데이터를 뜻합니다
 5. [BSON Types](https://github.com/agatespider/MP/tree/master/MONGODB/005)
 6. [비교, 정렬 순서](https://github.com/agatespider/MP/tree/master/MONGODB/006)
 7. [MongoDB Extended JSON](https://github.com/agatespider/MP/tree/master/MONGODB/007)
-
-10. [몽고쉘](https://github.com/agatespider/MP/tree/master/MONGODB/010)
+8. [Insert Documents](https://github.com/agatespider/MP/tree/master/MONGODB/008)
+9. [Query Documents](https://github.com/agatespider/MP/tree/master/MONGODB/009)
+10. [몽고쉘](https://github.com/agatespider/MP/tree/master/MONGODB/099)
     
 ## 정리    
 간략하게 몽고디비란 무엇인지 알아보았습니다. 다음은 세부적인 각단계를 세부단계 목록을 통해서 알아가
