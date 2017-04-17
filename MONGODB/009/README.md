@@ -95,4 +95,22 @@ $lt는 작다라는 뜻입니다. 즉 30보다 작은 값을 찾아라는 의미
      
     SELECT * FROM inventory WHERE status = "A" OR qty < 30
 
+## AND와 OR의 조건식
+다음 예제는 status가 A이고 qty가 30보다 작거나 item이 p로 시작하는 document를 collection안에서 질의하는 예제입니다.
+
+    > db.inventory.find( {
+    ...      status: "A",
+    ...      $or: [ { qty: { $lt: 30 } }, { item: /^p/ } ]
+    ... } )
+    { "_id" : ObjectId("58ef4d8d0b3b0e2580e62db7"), "item" : "journal", "qty" : 25, "size" : { "h" : 14, "w" : 21, "uom" : "cm" }, "status" : "A" }
+    { "_id" : ObjectId("58ef4d8d0b3b0e2580e62dbb"), "item" : "postcard", "qty" : 45, "size" : { "h" : 10, "w" : 15.25, "uom" : "cm" }, "status" : "A" }
+
+아래는 위 질의의 SQL 문입니다.
+
+    SELECT * FROM inventory WHERE status = "A" AND ( qty < 30 OR item LIKE "p%")
+    
+그리고 몽고디비는 문자를 검색할때 정규식을 지원합니다. 자세한건 [여기](https://docs.mongodb.com/manual/reference/operator/query/regex/#op._S_regex)에서 볼 수 있습니다.
+
+
+
 ## 정리

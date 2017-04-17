@@ -1,0 +1,4 @@
+# MSSQL FUNCTION 정리
+
+  1. NEWID : 새로운 UUID 생성
+  2. CHECKSUM
