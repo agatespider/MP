@@ -18,7 +18,8 @@ var path = require('path'),
     cookieParser = require('cookie-parser'),
     morgan = require('morgan'),
     methodOverride = require('method-override'),
-    errorHandler = require('errorhandler');
+    errorHandler = require('errorhandler')
+    moment = require('moment');
 
 module.exports = function(app) {
     app.use(morgan('dev'));
@@ -26,7 +27,23 @@ module.exports = function(app) {
     app.use(bodyParser.json());
     app.use(methodOverride());
     app.use(cookieParser('some-secret-value-here'));
-    routes(app);    // 경로들을 routes 폴더로 이동?
+
+    // 핸들바 등록, layout과 view관리
+    app.engine('handlebars', exphbs.create({
+        defaultLayout: 'main',
+        layoutsDir: app.get('views') + '/layout',
+        partialsDir: [app.get('views') + '/partials'],
+        helpers: {
+            timeago: function(timestamp) {
+                console.log(timestamp);
+                return moment(timestamp).startOf('minute').fromNow();
+            }
+        }
+    }).engine);
+
+    app.set('view engine', 'handlebars');
+
+    routes(app);
     app.use('/public/', express.static(path.join(__dirname, '../public')));
 
     if('development' === app.get('env')) {
