@@ -2,10 +2,6 @@
 
 ## <a name='synopsis'><a name='synopsis'>개요</a>
 이번장에서는 몽고쉘에서 제공하는 쿼리 질의기능을 하는 db.collection.find()메소드를 사용해보도록 하겠습니다.
-
-## <a name='toc'><a name='toc'>목차</a>
-
-  1. [Insert a Single Document](#iasd)
   
 ## 샘플 등록
 아래는 inventory collection에 데이터를 넣는 예제 입니다. 
@@ -111,6 +107,18 @@ $lt는 작다라는 뜻입니다. 즉 30보다 작은 값을 찾아라는 의미
     
 그리고 몽고디비는 문자를 검색할때 정규식을 지원합니다. 자세한건 [여기](https://docs.mongodb.com/manual/reference/operator/query/regex/#op._S_regex)에서 볼 수 있습니다.
 
+## 행동
+db.collection.find()메소드는 document와 매칭되는 [cursor](https://docs.mongodb.com/manual/tutorial/iterate-a-cursor/)를 반환합니다.
 
+## Read Isolation
+복제셋이나 복제된샤드를 클라이언트가 read할 경우 클라이언트가 read하는 것에 대해서 격리 수준을 설정 할 수 있습니다. 자세한 사항은 [Read Concern](https://docs.mongodb.com/manual/reference/read-concern/)를 참고하시기 바랍니다. 
+
+## 추가된 메소드
+아래의 메소들은 collection에서 document를 읽는 추가된 메소드 입니다.
+
+  1. db.collection.findOne
+  1. aggregation pipeline의 $match pipeline 단계에서 몽고디비 쿼리들을 엑세스할 수 있도록 해줍니다.
+
+db.collection.findOne메소드는 하나의 document를 반환하는 읽기 연산을 실행합니다. 실제 내부적으로는 db.collection.find()에서 limit을 1과 같이 사용하는 것입니다.
 
 ## 정리
