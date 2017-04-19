@@ -64,16 +64,17 @@ Document란 무엇이냐면 아래와 같은 형태의 데이터를 뜻합니다
      
 ## 세부목차 - Document
 
-1. [몽고디비설치](https://github.com/agatespider/MP/tree/master/MONGODB/001)
-2. [Database와 Collection](https://github.com/agatespider/MP/tree/master/MONGODB/002)
-3. [Capped Collection](https://github.com/agatespider/MP/tree/master/MONGODB/003)
-4. [Document](https://github.com/agatespider/MP/tree/master/MONGODB/004)
-5. [BSON Types](https://github.com/agatespider/MP/tree/master/MONGODB/005)
-6. [비교, 정렬 순서](https://github.com/agatespider/MP/tree/master/MONGODB/006)
-7. [MongoDB Extended JSON](https://github.com/agatespider/MP/tree/master/MONGODB/007)
-8. [Insert Documents](https://github.com/agatespider/MP/tree/master/MONGODB/008)
-9. [Query Documents](https://github.com/agatespider/MP/tree/master/MONGODB/009)
-10. [몽고쉘](https://github.com/agatespider/MP/tree/master/MONGODB/099)
+001. [몽고디비설치](https://github.com/agatespider/MP/tree/master/MONGODB/001)
+002. [Database와 Collection](https://github.com/agatespider/MP/tree/master/MONGODB/002)
+003. [Capped Collection](https://github.com/agatespider/MP/tree/master/MONGODB/003)
+004. [Document](https://github.com/agatespider/MP/tree/master/MONGODB/004)
+005. [BSON Types](https://github.com/agatespider/MP/tree/master/MONGODB/005)
+006. [비교, 정렬 순서](https://github.com/agatespider/MP/tree/master/MONGODB/006)
+007. [MongoDB Extended JSON](https://github.com/agatespider/MP/tree/master/MONGODB/007)
+008. [Insert Documents](https://github.com/agatespider/MP/tree/master/MONGODB/008)
+009. [Query Documents](https://github.com/agatespider/MP/tree/master/MONGODB/009)
+010. [New Query Document](https://github.com/agatespider/MP/tree/master/MONGODB/010)
+099. [몽고쉘](https://github.com/agatespider/MP/tree/master/MONGODB/099)
     
 ## 정리    
 간략하게 몽고디비란 무엇인지 알아보았습니다. 다음은 세부적인 각단계를 세부단계 목록을 통해서 알아가

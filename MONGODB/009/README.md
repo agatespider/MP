@@ -30,6 +30,7 @@
 ## 비교조건의 정의
 데이터를 비교하는 방법은 [query filter document](https://docs.mongodb.com/manual/core/document/#document-query-filter)의 <field>:<value>식을 사용하는 것입니다.
 
+
     { <field1>: <value1>, ... }
     
 다음은 inventory collection에서 status 가 "D"인 모든 Document를 검색하는 예제입니다.
