@@ -75,7 +75,13 @@ Document란 무엇이냐면 아래와 같은 형태의 데이터를 뜻합니다
 009. [Query Documents](https://github.com/agatespider/MP/tree/master/MONGODB/009)
 010. [New Query Document](https://github.com/agatespider/MP/tree/master/MONGODB/010)
 099. [몽고쉘](https://github.com/agatespider/MP/tree/master/MONGODB/099)
+
     
+##
+실행계획을 보려면 아래와 같이 마지막 항목에 explain()을 실행 시켜주면 됩니다.
+    
+    > db.inventory.find({"item":"Jack"}).explain()
+
 ## 정리    
 간략하게 몽고디비란 무엇인지 알아보았습니다. 다음은 세부적인 각단계를 세부단계 목록을 통해서 알아가
 보도록 하겠습니다.

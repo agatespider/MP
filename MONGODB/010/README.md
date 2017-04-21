@@ -6,18 +6,19 @@
 ## <a name='insertSample'>샘플 데이터 저장</a>
 
     db.inventory.insertMany( [
-       { item: "journal", qty: 25, size: { h: 14, w: 21, uom: "cm" }, "tags" : [ "cotton", "red" ], status: "A" },
-       { item: "notebook", qty: 50, size: { h: 8.5, w: 11, uom: "in" }, "tags" : [ "cotton", "yellow" ], status: "A" },
-       { item: "paper", qty: 100, size: { h: 8.5, w: 11, uom: "in" }, "tags" : [ "cotton", "blue" ], status: "B" },
-       { item: "planner", qty: 75, size: { h: 22.85, w: 30, uom: "cm" }, "tags" : [ "cotton", "black" ], status: "C" },
-       { item: "postcard", qty: 45, size: { h: 10, w: 15.25, uom: "cm" }, "tags" : [ "cotton", "white" ], status: "D" }
+       { title:"Whatever you do, make it pay.", item: "journal", qty: 25, size: { h: 14, w: 21, uom: "cm" }, "tags" : [ "cotton", "red" ], status: "A", description: "My power flurries through the air into the ground" },
+       { title:"Step by step goes a long way.", item: "notebook", qty: 50, size: { h: 8.5, w: 11, uom: "in" }, "tags" : [ "spring", "yellow" ], status: "A", description: "태양이 떠오를때에 나는 여기 서있을거야"},
+       { title:"All fortune is to be conquered by bearing it.", item: "paper", qty: 100, size: { h: 8.5, w: 11, uom: "in" }, "tags" : [ "cotton", "blue" ], status: "B", description: "No right, No wrong, No rules for me"},
+       { title:"To know is nothing at all to imagine is everything.", item: "planner", qty: 75, size: { h: 22.85, w: 30, uom: "cm" }, "tags" : [ "pal", "black" ], status: "C", description: "사람들이 뭐라고 하든지" },
+       { title:"The winds and waves are always on the side of the ablest navigators.", item: "postcard", qty: 45, size: { h: 10, w: 15.25, uom: "cm" }, "tags" : [ "funny", "white" ], status: "D", description: "Conceal, don't feel, Don't let them know" },
+       { title:"The best and most beautiful things in the world cannot be seen of even touched. ", item: "mask", qty: 10, size: { h: 5, w: 2.4, uom: "cm" }, "tags" : [ "cold", "white" ], status: "C", description: "내 안에 휘몰아치는 바람은 폭풍처럼 울부짖어" }
     ]);
     
 ## <a name='search'>조회</a>
 
 ### 전체 데이터 조회
     
-    표현식
+    사용법
     db.inventory.find({})
     db.inventory.find()
     사용예 - 모든 document를 찾는다.
@@ -27,7 +28,7 @@
 ### "같다" 라는 질의 표현
 ":"를 사용해서 조건에 field와 value가 같은지 조건을 걸수 있습니다.
 
-    표현식 
+    사용법 
     <field1>: <value1>
     사용예 - qty 필드가 100인 모든 document를 찾는다.
     db.inventory.find({"qty": 100})
@@ -134,6 +135,7 @@
     db.inventory.update({tags: {$in: ["cotton", "red"]}}, {$set: {item: "Jack"}}, {multi: true})
     사용예 - tags배열에 "on"으로 시작하는 문자열이거나 또는 "ed"로 시작하는 문자열 값이 있는 모든 document를 찾는다. (정규식 사용)
     db.inventory.find({tags: {$in: [/^cot/, /^re/]}})
+       
 
 #### $nin
     
@@ -157,30 +159,107 @@
   
 #### $or
 
-    조건식
+    사용법
     { $or: [ { <expression1}, { <expression2}, ... , { <expressionN} ] }
     사용예 - qty가 30보다 작거나 또는 status가 "D"인 document를 반환합니다. 
     db.inventory.find({$or: [{"qty":{$lt:30}}, {"status": "D"}]})
+    { "_id" : ObjectId("58ee0f9cd41ac54b19267887"), "item" : "journal", "qty" : 25, "tags" : [ "blank", "red" ], "size" : { "h" : 14, "w" : 21, "uom" : "cm" } }
+    { "_id" : ObjectId("58ee0f9cd41ac54b19267889"), "item" : "mousepad", "qty" : 25, "tags" : [ "gel", "blue" ], "size" : { "h" : 19, "w" : 22.85, "uom" : "cm" } }
+    
+몽고디비는 보통 하나의 쿼리당 하나의 index를 사용하는데 $OR은 $or:[]안에 인덱스를 설정한 배열의 갯수만큼 인덱스를 이용하여 쿼리를 수행합니다. 예전에는 이렇게 질의된 Document를 합치는데 비용이 발생해서 최대한 $in으로 가라고 하는데 혹시나해서 explain()으로 in과 비교해본 바 별차이 없어보였습니다.
+
+하지만 몽고디비 내부적으로 실행계획을 변경하는 것인지도 모르니까, $in을 써야할때는 $in을 써야 할거 같습니다. 
+    
+    사용예 - qty, status field 인덱스 생성
+    db.inventory.createIndex( { qty: 1 } )
+    db.inventory.createIndex( { status: 1 } )
+    사용예 - $or을 사용해서 status가 "A"이거나 qty가 25인 쿼리의 실행계획표시 - 인덱스 2개를 사용하는 것을 확인 할 수 있습니다.
+    db.inventory.find({$or:[{"status": "A"}, {"qty":25}]}).explain()
+    사용예 - $or을 사용해서 status가 "A" 혹은 "D"인 쿼리의 실행계획 표시
+    db.inventory.find({$or:[{"status": "A"}, {"status":"D"}]}).explain()
+    db.inventory.find({"status": {$in: ["A","D"]}}).explain()
+    
+$or에서 $text를 사용하려면 $text는 기본적으로 text Index를 설정한 항목만 검색하므로 $or에서 질의하는 모든 대상에 text index를 걸어야 합니다.
+    
+    사용예 - description에 text index를 설정
+    db.inventory.createIndex( { description: "text" } )
+    사용예 - Conceal text를 가진 항목을 질의해옵니다. 질의됨 (index안걸면 검색 자체가 안되거나 아예 textindex가 없으면 오류나요)
+    db.inventory.find({$text: {$search: "Conceal"}})
+    사용예 - Conceal text를 가진 항목 또는 qty가 25인 값을 가진 document를 질의 합니다.
+    db.inventory.find({$or: [{$text: {$search: "Conceal"}}, {qty: 25}]})
+    사용예 - $text는 2개 이상 쓸 수 없습니다.
+    db.inventory.find({$or: [{$text: {$search: "Conceal"}}, {$text: {$search: "nononono"}}]})
+
+$or을 사용하는 질의문에 sort는 2.6이전엔 index를 타지 않았지만 2.6이후부터는 설정된 index를 사용해서 sort합니다.
+    
+    db.inventory.createIndex({qty: 1});
+    사용예 - sort할때 index를 써서 sort하는 것을 어떻게 아는지 그것에 대해서는 방법을 잘...모르겟습니다.
+    db.inventory.find({$or: [{qty: 25}]}).sort().explain();
+    
+#### $and
+$and는 여러개의 식을 만족하는 Document를 질의 합니다. 그리고 short-circuit evaluation를 사용하는데 short-circuit evaluation란 A랑 B의 조건이 존재하는데 A가 false일 경우 b를 평가하지 않는 형태를 뜻합니다.
+
+$and를 사용할 수 도 있지만 ","도 And를 뜻합니다.
+
+    사용법
+    { $and: [ { <expression1}, { <expression2}, ... , { <expressionN} ] }
+    사용 예 - qty가 30보다 작거고 status가 "D"인 document를 반환합니다. qty가 30보다 작은 필드는 아예 status가 D인것에 대한 평가를 하지 않습니다. 
+    db.inventory.find({$and: [{"qty":{$lt:30}}, {"status": "D"}]})
     { "_id" : ObjectId("58ee0f9cd41ac54b19267887"), "item" : "journal", "qty" : 25, "tags" : [ "blank", "red" ], "size" : { "h" : 14, "w" : 21, "uom" : "cm" } }
     { "_id" : ObjectId("58ee0f9cd41ac54b19267889"), "item" : "mousepad", "qty" : 25, "tags" : [ "gel", "blue" ], "size" : { "h" : 19, "w" : 22.85, "uom" : "cm" } }
     { "_id" : ObjectId("58ef4d8d0b3b0e2580e62db7"), "item" : "journal", "qty" : 25, "size" : { "h" : 14, "w" : 21, "uom" : "cm" }, "status" : "A" }
     { "_id" : ObjectId("58ef4d8d0b3b0e2580e62db9"), "item" : "paper", "qty" : 100, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "status" : "D" }
     { "_id" : ObjectId("58ef4d8d0b3b0e2580e62dba"), "item" : "planner", "qty" : 75, "size" : { "h" : 22.85, "w" : 30, "uom" : "cm" }, "status" : "D" }
     { "_id" : ObjectId("58f594155ba58f30159359c6"), "item" : "journal", "qty" : 25, "size" : { "h" : 14, "w" : 21, "uom" : "cm" }, "status" : "A" }
-    
-#### $and
-
-    조건식
-        { $or: [ { <expression1}, { <expression2}, ... , { <expressionN} ] }
-        사용예 - qty가 30보다 작거나 또는 status가 "D"인 document를 반환합니다. 
-        db.inventory.find({$or: [{"qty":{$lt:30}}, {"status": "D"}]})
-        { "_id" : ObjectId("58ee0f9cd41ac54b19267887"), "item" : "journal", "qty" : 25, "tags" : [ "blank", "red" ], "size" : { "h" : 14, "w" : 21, "uom" : "cm" } }
-        { "_id" : ObjectId("58ee0f9cd41ac54b19267889"), "item" : "mousepad", "qty" : 25, "tags" : [ "gel", "blue" ], "size" : { "h" : 19, "w" : 22.85, "uom" : "cm" } }
-        { "_id" : ObjectId("58ef4d8d0b3b0e2580e62db7"), "item" : "journal", "qty" : 25, "size" : { "h" : 14, "w" : 21, "uom" : "cm" }, "status" : "A" }
-        { "_id" : ObjectId("58ef4d8d0b3b0e2580e62db9"), "item" : "paper", "qty" : 100, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "status" : "D" }
-        { "_id" : ObjectId("58ef4d8d0b3b0e2580e62dba"), "item" : "planner", "qty" : 75, "size" : { "h" : 22.85, "w" : 30, "uom" : "cm" }, "status" : "D" }
-        { "_id" : ObjectId("58f594155ba58f30159359c6"), "item" : "journal", "qty" : 25, "size" : { "h" : 14, "w" : 21, "uom" : "cm" }, "status" : "A" }
-
+    사용예 - qty가 25이고 status가 A인 document를 질의합니다.
+    db.inventory.find({"qty":25, status:"A"})
+    사용예 - item이 journal이거나 item이 paper이고 status가 D이거나 qty가 100보다 작은 document를 구합니다.
+    db.inventory.find( {
+        $and : [
+            { $or : [ { item : "journal" }, { item : "paper" } ] },
+            { $or : [ { status : "D" }, { qty : { $lt : 100 } } ] }
+        ]
+    } )
+ 
 #### $not
+$not은 <opterator-expression>에 맞지 않는 document를 검색합니다. 또한 <field>에 값이 존재 하지 않은 것도 검색합니다.
+
+    사용법
+    {<field>: {$not: {<operator-expression>}}}
+    사용예 - status가 A가 아니고 그것의 NOT논리식에 해당하는 Document를 질의 합니다. (즉 status가 "A")인것을 질의하라 라는 뜻입니다.
+    > db.inventory.find({status : {$not: {$ne: "A"}}})
+    { "_id" : ObjectId("58f9b71172d589d168a5e11e"), "title" : "Whatever you do, make it pay.", "item" : "journal", "qty" : 25, "size" : { "h" : 14, "w" : 21, "uom" : "cm" }, "tags" : [ "cotton", "red" ], "status" : "A", "description" : "My power flurries through the air into the ground" }
+    { "_id" : ObjectId("58f9b71172d589d168a5e11f"), "title" : "Step by step goes a long way.", "item" : "notebook", "qty" : 50, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "tags" : [ "spring", "yellow" ], "status" : "A", "description" : "태양이 떠오를때에 나는 여기 서있을거야" }
+
+$not은 $regex연산자를 지원하지 않습니다. 하지만 //를 사용해서 정규식에 해당하는 document를 가져 올 수 있습니다.
+    
+    > db.inventory.find( { item: { $not: /^p.*/ } } )
+    { "_id" : ObjectId("58f9b71172d589d168a5e11e"), "title" : "Whatever you do, make it pay.", "item" : "journal", "qty" : 25, "size" : { "h" : 14, "w" : 21, "uom" : "cm" }, "tags" : [ "cotton", "red" ], "status" : "A", "description" : "My power flurries through the air into the ground" }
+    { "_id" : ObjectId("58f9b71172d589d168a5e11f"), "title" : "Step by step goes a long way.", "item" : "notebook", "qty" : 50, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "tags" : [ "spring", "yellow" ], "status" : "A", "description" : "태양이 떠오를때에 나는 여기 서있을거야" }
+    { "_id" : ObjectId("58f9b71172d589d168a5e123"), "title" : "The best and most beautiful things in the world cannot be seen of even touched. ", "item" : "mask", "qty" : 10, "size" : { "h" : 5, "w" : 2.4, "uom" : "cm" }, "tags" : [ "cold", "white" ], "status" : "C", "description" : "내 안에 휘몰아치는 바람은 폭풍처럼 울부짖어" }
+
+$not은 배열 비교시 문제가 발생 할 수 있다고 하는데 간단한 배열 비교는 이상없이 됩니다. 차후 문제되는 형태가 발생시 재 정리 하도록 하겠습니다.
+
+    > db.inventory.find({"tags": {$not: {$ne: ["pal", "black"]}}})
+    { "_id" : ObjectId("58f9b71172d589d168a5e121"), "title" : "To know is nothing at all to imagine is everything.", "item" : "planner", "qty" : 75, "size" : { "h" : 22.85, "w" : 30, "uom" : "cm" }, "tags" : [ "pal", "black" ], "status" : "C", "description" : "사람들이 뭐라고 하든지" }
 
 #### $nor
+$nor은 하나 이상의 쿼리식 배열에 논리식 NOR을 수행합니다.
+
+    사용법
+    {$nor: [{<expression1>}, {<expression2>}, ... {<expressonN}]}
+    사용예 - item이 journal이 아닌 값을 가지고 qty가 100이 아닌 값을 가진 document, item이 journal이 아니면서 qty값이 없는 document, item이 없고 qty가 100이 아닌 document, item, qty가 존재하지 않는 document를 검색합니다.
+    > db.inventory.find({$nor: [{item: "journal"}, {"qty": 100}]})
+    { "_id" : ObjectId("58f9b71172d589d168a5e11f"), "title" : "Step by step goes a long way.", "item" : "notebook", "qty" : 50, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "tags" : [ "spring", "yellow" ], "status" : "A", "description" : "태양이 떠오를때에 나는 여기 서있을거야" }
+    { "_id" : ObjectId("58f9b71172d589d168a5e121"), "title" : "To know is nothing at all to imagine is everything.", "item" : "planner", "qty" : 75, "size" : { "h" : 22.85, "w" : 30, "uom" : "cm" }, "tags" : [ "pal", "black" ], "status" : "C", "description" : "사람들이 뭐라고 하든지" }
+    { "_id" : ObjectId("58f9b71172d589d168a5e122"), "title" : "The winds and waves are always on the side of the ablest navigators.", "item" : "postcard", "qty" : 45, "size" : { "h" : 10, "w" : 15.25, "uom" : "cm" }, "tags" : [ "funny", "white" ], "status" : "D", "description" : "Conceal, don't feel, Don't let them know" }
+    { "_id" : ObjectId("58f9b71172d589d168a5e123"), "title" : "The best and most beautiful things in the world cannot be seen of even touched. ", "item" : "mask", "qty" : 10, "size" : { "h" : 5, "w" : 2.4, "uom" : "cm" }, "tags" : [ "cold", "white" ], "status" : "C", "description" : "내 안에 휘몰아치는 바람은 폭풍처럼 울부짖어" }
+
+$nor에서 존재하지 않은 값을 검색하고 싶지 않다면 $exists를 사용할 수 있습니다.
+
+    사용예 Item이 journal이 아니고 qty가 100이 아닌 document를 검색합니다.
+    > db.inventory.find({$nor: [{item: "journal"}, {item: {$exists: false}}, {"qty": 100}, {"qty": {$exists: false}}]})
+    { "_id" : ObjectId("58f9b71172d589d168a5e11f"), "title" : "Step by step goes a long way.", "item" : "notebook", "qty" : 50, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "tags" : [ "spring", "yellow" ], "status" : "A", "description" : "태양이 떠오를때에 나는 여기 서있을거야" }
+    { "_id" : ObjectId("58f9b71172d589d168a5e121"), "title" : "To know is nothing at all to imagine is everything.", "item" : "planner", "qty" : 75, "size" : { "h" : 22.85, "w" : 30, "uom" : "cm" }, "tags" : [ "pal", "black" ], "status" : "C", "description" : "사람들이 뭐라고 하든지" }
+    { "_id" : ObjectId("58f9b71172d589d168a5e122"), "title" : "The winds and waves are always on the side of the ablest navigators.", "item" : "postcard", "qty" : 45, "size" : { "h" : 10, "w" : 15.25, "uom" : "cm" }, "tags" : [ "funny", "white" ], "status" : "D", "description" : "Conceal, don't feel, Don't let them know" }
+    { "_id" : ObjectId("58f9b71172d589d168a5e123"), "title" : "The best and most beautiful things in the world cannot be seen of even touched. ", "item" : "mask", "qty" : 10, "size" : { "h" : 5, "w" : 2.4, "uom" : "cm" }, "tags" : [ "cold", "white" ], "status" : "C", "description" : "내 안에 휘몰아치는 바람은 폭풍처럼 울부짖어" }
