@@ -6,11 +6,11 @@
 ## <a name='insertSample'>샘플 데이터 저장</a>
 
     db.inventory.insertMany( [
-       { title:"Whatever you do, make it pay.", item: "journal", qty: 25, size: { h: 14, w: 21, uom: "cm" }, "tags" : [ "cotton", "red" ], status: "A", description: "My power flurries through the air into the ground" },
-       { title:"Step by step goes a long way.", item: "notebook", qty: 50, size: { h: 8.5, w: 11, uom: "in" }, "tags" : [ "spring", "yellow" ], status: "A", description: "태양이 떠오를때에 나는 여기 서있을거야"},
-       { title:"All fortune is to be conquered by bearing it.", item: "paper", qty: 100, size: { h: 8.5, w: 11, uom: "in" }, "tags" : [ "cotton", "blue" ], status: "B", description: "No right, No wrong, No rules for me"},
-       { title:"To know is nothing at all to imagine is everything.", item: "planner", qty: 75, size: { h: 22.85, w: 30, uom: "cm" }, "tags" : [ "pal", "black" ], status: "C", description: "사람들이 뭐라고 하든지" },
-       { title:"The winds and waves are always on the side of the ablest navigators.", item: "postcard", qty: 45, size: { h: 10, w: 15.25, uom: "cm" }, "tags" : [ "funny", "white" ], status: "D", description: "Conceal, don't feel, Don't let them know" },
+       { title:"Whatever you do, make it pay.", item: "journal", qty: 25, size: { h: 14, w: 21, uom: "cm" }, "tags" : [ "cotton", "red" ], status: "A", description: "My power flurries through the air into the ground", day: null, zipCode: "939374" },
+       { title:"Step by step goes a long way.", item: "notebook", qty: 50, size: { h: 8.5, w: 11, uom: "in" }, "tags" : [ "spring", "yellow" ], status: "A", description: "태양이 떠오를때에 나는 여기 서있을거야", day: 5, zipCode: 5783858},
+       { title:"All fortune is to be conquered by bearing it.", item: "paper", qty: 100, size: { h: 8.5, w: 11, uom: "in" }, "tags" : [ ["yeah"], ["park"] ], status: "B", description: "No right, No wrong, No rules for me", zipCode: NumberLong(8939839)},
+       { title:"To know is nothing at all to imagine is everything.", item: "planner", qty: 75, size: { h: 22.85, w: 30, uom: "cm" }, "tags" : [ "pal", "black" ], status: "C", description: "사람들이 뭐라고 하든지", day: null, zipCode: NumberInt(93)},
+       { title:"The winds and waves are always on the side of the ablest navigators.", item: "postcard", qty: 45, size: { h: 10, w: 15.25, uom: "cm" }, "tags" : [ "funny", "white" ], status: "D", description: "Conceal, don't feel, Don't let them know", day: null},
        { title:"The best and most beautiful things in the world cannot be seen of even touched. ", item: "mask", qty: 10, size: { h: 5, w: 2.4, uom: "cm" }, "tags" : [ "cold", "white" ], status: "C", description: "내 안에 휘몰아치는 바람은 폭풍처럼 울부짖어" }
     ]);
     
@@ -257,9 +257,45 @@ $nor은 하나 이상의 쿼리식 배열에 논리식 NOR을 수행합니다.
 
 $nor에서 존재하지 않은 값을 검색하고 싶지 않다면 $exists를 사용할 수 있습니다.
 
-    사용예 Item이 journal이 아니고 qty가 100이 아닌 document를 검색합니다.
+    사용예 - Item이 journal이 아니고 qty가 100이 아닌 document를 검색합니다.
     > db.inventory.find({$nor: [{item: "journal"}, {item: {$exists: false}}, {"qty": 100}, {"qty": {$exists: false}}]})
     { "_id" : ObjectId("58f9b71172d589d168a5e11f"), "title" : "Step by step goes a long way.", "item" : "notebook", "qty" : 50, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "tags" : [ "spring", "yellow" ], "status" : "A", "description" : "태양이 떠오를때에 나는 여기 서있을거야" }
     { "_id" : ObjectId("58f9b71172d589d168a5e121"), "title" : "To know is nothing at all to imagine is everything.", "item" : "planner", "qty" : 75, "size" : { "h" : 22.85, "w" : 30, "uom" : "cm" }, "tags" : [ "pal", "black" ], "status" : "C", "description" : "사람들이 뭐라고 하든지" }
     { "_id" : ObjectId("58f9b71172d589d168a5e122"), "title" : "The winds and waves are always on the side of the ablest navigators.", "item" : "postcard", "qty" : 45, "size" : { "h" : 10, "w" : 15.25, "uom" : "cm" }, "tags" : [ "funny", "white" ], "status" : "D", "description" : "Conceal, don't feel, Don't let them know" }
     { "_id" : ObjectId("58f9b71172d589d168a5e123"), "title" : "The best and most beautiful things in the world cannot be seen of even touched. ", "item" : "mask", "qty" : 10, "size" : { "h" : 5, "w" : 2.4, "uom" : "cm" }, "tags" : [ "cold", "white" ], "status" : "C", "description" : "내 안에 휘몰아치는 바람은 폭풍처럼 울부짖어" }
+
+
+#### Element 질의 연산자
+
+#### $exists
+Boolean값이 true일경우 null값을 포함한 필드가 존재하는 모든 도큐먼트를 검색합니다.
+
+    사용법(문법)
+    { field: { $exists: <boolean> } }
+    사용예 - day 필드가 있는 모든 Document를 검색
+    > db.inventory.find({day: {$exists: true}})
+    { "_id" : ObjectId("58fdcf722ea9ef90ca0aac1f"), "title" : "Whatever you do, make it pay.", "item" : "journal", "qty" : 25, "size" : { "h" : 14, "w" : 21, "uom" : "cm" }, "tags" : [ "cotton", "red" ], "status" : "A", "description" : "My power flurries through the air into the ground", "day" : null }
+    { "_id" : ObjectId("58fdcf722ea9ef90ca0aac20"), "title" : "Step by step goes a long way.", "item" : "notebook", "qty" : 50, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "tags" : [ "spring", "yellow" ], "status" : "A", "description" : "태양이 떠오를때에 나는 여기 서있을거야", "day" : 5 }
+    { "_id" : ObjectId("58fdcf722ea9ef90ca0aac22"), "title" : "To know is nothing at all to imagine is everything.", "item" : "planner", "qty" : 75, "size" : { "h" : 22.85, "w" : 30, "uom" : "cm" }, "tags" : [ "pal", "black" ], "status" : "C", "description" : "사람들이 뭐라고 하든지", "day" : null }
+    { "_id" : ObjectId("58fdcf722ea9ef90ca0aac23"), "title" : "The winds and waves are always on the side of the ablest navigators.", "item" : "postcard", "qty" : 45, "size" : { "h" : 10, "w" : 15.25, "uom" : "cm" }, "tags" : [ "funny", "white" ], "status" : "D", "description" : "Conceal, don't feel, Don't let them know", "day" : null }
+    사용예 - day 필드가 존재하지 않는 Document를 모두 검색
+    > db.inventory.find({day: {$exists: false}})
+    { "_id" : ObjectId("58fdcfed205205343053a481"), "title" : "All fortune is to be conquered by bearing it.", "item" : "paper", "qty" : 100, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "tags" : [ "cotton", "blue" ], "status" : "B", "description" : "No right, No wrong, No rules for me" }
+    { "_id" : ObjectId("58fdcfed205205343053a484"), "title" : "The best and most beautiful things in the world cannot be seen of even touched. ", "item" : "mask", "qty" : 10, "size" : { "h" : 5, "w" : 2.4, "uom" : "cm" }, "tags" : [ "cold", "white" ], "status" : "C", "description" : "내 안에 휘몰아치는 바람은 폭풍처럼 울부짖어" }
+
+#### $type
+field의 $type의 값이 <BSON type number>인 모든 Document를 검색합니다. array같은 경우 현재 필드가 array인 것을 찾지 않습니다. 다만 하위에 array값을 갖는 항목만을 반환합니다.
+
+<Bson type number>나 <String alias>는 [여기](https://docs.mongodb.com/manual/reference/operator/query/type/#document-type-available-types)를 참고하세요.
+
+
+    사용법(문법)
+    { field: { $type: <BSON type number> 또는 <String alias> } }
+    사용예 - zipCode가 문자열인 모든 Document를 검색.
+    > db.inventory.find({zipCode: {$type : 2}})
+    { "_id" : ObjectId("58fdd13a6351a8ef68549e6c"), "title" : "Whatever you do, make it pay.", "item" : "journal", "qty" : 25, "size" : { "h" : 14, "w" : 21, "uom" : "cm" }, "tags" : [ "cotton", "red" ], "status" : "A", "description" : "My power flurries through the air into the ground", "day" : null, "zipCode" : "939374" }
+    사용예 - tags에 array값이 존재하는 document를 검색합니다.
+    > db.inventory.find({"tags": {$type: 4}})
+    { "_id" : ObjectId("58fdd354c3e73bb82e97f5bd"), "title" : "All fortune is to be conquered by bearing it.", "item" : "paper", "qty" : 100, "size" : { "h" : 8.5, "w" : 11, "uom" : "in" }, "tags" : [ [ "yeah" ], [ "park" ] ], "status" : "B", "description" : "No right, No wrong, No rules for me", "zipCode" : NumberLong(8939839) }
+    >
+    
