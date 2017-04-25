@@ -1,12 +1,13 @@
 /**
  * Created by Administrator on 2017/04/15.
  */
+var movie = require('../data/movie.json');
 
 module.exports = {
     index: function(req, res, next) {
-        /*res.render('index', {
+        res.render('index', {
             data: {
-                otherData: 'Something Else'
+                movies: movie
             },
             vue: {
                 head: {
@@ -17,7 +18,7 @@ module.exports = {
                     ]
                 }
             }
-        });*/
-        res.render('index');
+        });
+        //res.send(movie);
     }
 };

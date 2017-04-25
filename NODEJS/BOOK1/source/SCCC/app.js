@@ -9,6 +9,8 @@ var express = require('express'),
 app.set('port', process.env.PORT || 3300);
 app.set('views', __dirname + '/views');
 app.set('components', __dirname + '/components');
+app.set('data', __dirname + '/data');
+
 app = config(app);
 
 app.listen(app.get('port'), function() {
