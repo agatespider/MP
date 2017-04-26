@@ -8,6 +8,12 @@
 * Object 프로토타입과 프로토타입 상속
 * 정리
 
+## <a name='toc'><a name='toc'>목차</a>
+
+  1. [객체 프로토타입과 프로토타입 상속](#prototype)
+  1. [new 객체 생성](#new_object)
+  
+
 ## 개요
 
 ## 원시형과 원시형객체
@@ -33,7 +39,7 @@ Javascript의 원시형은 String, Number, Boolean, null, undefined, Object 총 
 
 ## 객체리터널
 
-아래 코드처럼 선언한 객체를 객체리터널(object literal)이라고 말합니다.
+아래 코드처럼 선언한 객체를 객체리터널(object literal)이라고 말합니다. 리터널이란 더이상 분해할 수 없는 값을 뜻합니다.
     
     { name: 'Love', genus: 'Do you feel', genius: Do you need' }
         
@@ -128,6 +134,92 @@ Javascript의 원시형은 String, Number, Boolean, null, undefined, Object 총 
  
 하지만 존재하지 않는다면 chimp의 prototype(__proto__)안에 toString이 존재하는지 찾아보고 toString을 찾고 이것을 실행합니다. 계속 prototype을 찾아 올라가다 더이상 없으면 undefined를 반환합니다. 
 
+## <a name='prototype'>객체 프로토타입과 프로토타입 상속</a>
+
+Javascript의 객체들은 어떻게 생성하는지 상관없이 프로토타입객체라는 것을 자동으로 연결하고 프로토타입객체의 정보를 상속받아서 사용하게 됩니다.
+
+다음 코드를 보면 chimp는 toString()을 구현하지 않았지만 오류가 발생하지 않고 '[Object object]'값을 반환합니다.
+
+    var chimp = {
+        hasThumbs: true,
+        swing: function() {
+            return '나무에 대롱대롱';
+        }
+    }
+
+    console.log(chimp.toString());
+    
+chimp.toString()을 호출하면 javascript engine은 chimp에 직접 구현된 toString() 찾아 봅니다. 
+그리고 없다는 것을 알게 되죠, 이어서 엔진은 chimp의 prototype인 Object.prototype을 찾아보고 거기서 toString() 함수 프로퍼티를 발견합니다. 이렇게 발견된 함수를 실행하고 결과값을 반환하는 일을 합니다.
+
+당연하게도 chimp에서 toString()을 구현을 해주면 object.prototype까지 살펴볼 필요가 없으니 구현한 toString()실행을 할거라고 예상을 할 수 있습니다.
+
+#### 프로토타입 상속
+상속을 어떻게 사용할지 생각을 해봅시다. 원숭이계 동물 침프와 보노보는 둘다 원숭이 이며 나무에 매달릴 수 있고 꼬리가 있습니다. 여기서 공통적인 속성은 원숭이, 꼬리가 있고 나무에 매달릴 수 있다는 것을 알 수 있습니다.
+
+이런 공통적인 속성을 별도 객체에 담아두고 공유해서 사용하면 각각 구현을 할 필요가 없겟죠. 이런 것을 공유 프로토타입(shared prototype)이라 합니다. 이런 공유 프로토타입의 값을 변경하게 되면 관련된 객체에 영향이 갑니다.
+
+    var monkey = {
+        hasTail: true,
+        swing: function() {
+            return '매달리기';
+        }
+    };
+    
+    var chimp = Object.create(ape);
+    var bonobo = Object.create(ape);
+    
+    console.log(chimp.hasTail); // true
+    console.log(bonobo.hasTail); // true
+    
+    ape.hasTail = false; // 공유 프로토타입의 hasTail속성을 변경했으므로 chimp, bonobo모두 영향이 미칩니다.
+    
+    console.log(chimp.hasTail); // false
+    console.log(bonobo.hasTail); // false
+
+Object.create(proto, <propertiesObject>)는 인자로 넘긴 proto나 propertiesObject를 갖는 새로운 객체를 만드는 역할을 합니다. 자세한것은 spec을 찾아보세요.
+  
+#### 프로토타입 체인
+프로토타입 체인이란 JavaScript에서 속성이나 메서드를 참조하게 되면 먼저 자신 안에 정의되어 있는지 찾아 본 다음 발견하지 못하면 그 프로토타입으로 이동하여 해당 프로토타입 객체 내에서 멤버를 찾습니다.
+이런 행동은 멤버를 찾거나 멤버를 찾지 못하고 null을 반환하고서야 비로소 끝나는데 이러한 객체들의 연쇄를 가리켜 프로토타입 체인(prototype chain)이라고 합니다.
+  
+이러한 프로토타입체인을 이용해서 여러 계층으로 체인을 구성할 수 있습니다.
+  
+    var primate = {
+        stereoscopicVision: "true"
+    };
+    
+    var monkey = Object.create(primate, {
+        hasTail: {value : false},
+        swing: function() {
+            return '매달리기';
+        }
+    });
+    
+    var chimp = Object.create(monkey);
+    
+    console.log(chimp);
+    console.log(chimp.hasTail); // false (monkey prototype)
+    console.log(chimp.stereoscopicVision) // true (primate prototype)  
+
+하지만 당연하게도 이런 프로토타입 체인이 깊숙히 진행이되면 당연히 성능에는 좋지 않기 때문에 너무 연속적인 프로토타입 체인을 만들지 않도록 설계를 잘해야 합니다.
+
+## <a name='new_object'>new 객체 생성</a>
+Javascript에서 new를 사용해서 객체를 생성하는것은 c나 java와 거의 유사하다. 다음 예제는 Marsupial함수와 new를 이용해서 객체를 생성하는 예제입니다.
+
+    function Marsupial(name, nocturnal) {
+        this.name = name;
+        this.isNocturnal = nocturnal;
+    }
+    
+    var maverick = new Marsupial('메버릭', true);
+    var slider = new Marsupial('슬라이더', false);
+    
+    console.log(maverick.isNocturnal); // true
+    console.log(slider.isNocturnal); // false
+    
+     
+    
 ## 정리
 
 
