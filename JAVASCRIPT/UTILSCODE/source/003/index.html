@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TEST</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" ></script>
+    <script src="jquery.validate.min.js"></script>
+
+    <script>
+        $(function() {
+            $.validator.setDefaults({
+                onkeyup:false,
+                onclick:false,
+                onfocusout:false,
+                showErrors:function(errorMap, errorList) {
+                    if(this.numberOfInvalids()) {
+                        alert(errorList[0].message);
+                    }
+                }
+            });
+
+            $.validator.addMethod("regex", function(value, element, regexpr) {
+                return regexpr.test(value);
+            }, "데이터를 확인해주시기 바랍니다.");
+
+            var v = $("#form1").validate({
+                rules: {
+                    field1: {
+                        required : true,
+                        regex: /^\d{3}-\d{3,4}-\d{4}$/
+                    }
+                },
+                messages: {
+                    field1: "전화번호를 체크해주시기 바랍니다."
+                }
+            });
+
+            $("#btn_test").click(function() {
+                if(!$("#form1").valid()){
+                    v.focusInvalid();
+                }
+            });
+        });
+
+    </script>
+</head>
+<body>
+    <form id="form1" name="form1">
+        전화번호: <input name="field1" type="text" />
+        이메일: <input name="field2" type="text" />
+    </form>
+
+    <button id="btn_test">test</button>
+</body>
+</html>

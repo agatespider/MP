@@ -1,32 +1,19 @@
 <template lang="html">
-    <div>
-        <h1>{{title}}</h1>
+<div>
+    <aside class="menu">
+        <p class="menu-label">
+            Table
+        </p>
+        <ul class="menu-list">
+            <li><a href="/bbs/simple">Bbs simple</a></li>
+        </ul>
+    </aside>
 
-        <ol>
-            <li v-for="movie in movies">
-                {{movie.name}}
-            </li>
-        </ol>
-
-        <button v-on:click="plus">click me!</button>
-
-    </div>
+</div>
 </template>
 
 <script>
 export default {
-    data: function() {
-        return {
-            a: 1
-        }
-    },
-    methods: {
-        plus: function() {
-            console.log("PPPPPPPPPPPPPPPP");
-        }
-    }
+
 }
 </script>
-
-<style lang="css">
-</style>
