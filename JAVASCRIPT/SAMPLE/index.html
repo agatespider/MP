@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>_this = this 테스트</title>
+
+    <script
+            src="https://code.jquery.com/jquery-1.12.4.min.js"
+            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+            crossorigin="anonymous"></script>
+</head>
+<script>
+
+
+
+
+    $( document ).ready(function() {
+        //1번 예제
+        var human = function() {
+            var head = {
+                style : '보통'
+            };
+
+            return {
+                getHeadStyle : function() {
+                    return head.style;
+                },
+                setHeadStyle : function(style) {
+                    head.style = style;
+                },
+                checkHead: function(style) {
+                    console.log('Head 체크를 시작합니다...');
+                    console.log(this.getHeadStyle())
+
+                    if(this.getHeadStyle() === style) { // this.getHeadStyle()을 사용하고 있습니다.
+                        console.log('Head 스타일이 동일합니다.');
+                    } else {-
+                        console.log('Head 스타일이 동일하지 않습니다. 이 Head 스타일이 맞아요?');
+                    }
+                    console.log('Head 스타일 체크를 종료합니다.');
+                }
+            }
+        }
+
+        var momo = human();
+        momo.setHeadStyle('스킨헤드');
+        momo.checkHead('스킨헤드'); // 23번의 this는 momo를 의미합니다.
+        //momo.checkHead.call(this, '스킨헤드');  // 23번의 this는 global을 의미합니다. global의 getHeadStyle이 없으므로 당연히 undefined오류가 발생합니다.
+
+        var alertFactory = function() {
+            return {
+                addTargetElement : function($el, type) {
+                    var _this = this; // 이게 없으면 thi
+                    $el.on('click', function(e) {
+                        if(type === 'tag') {
+                            alert(this.tagMsg($el)); // element의 scope를 의미한다.
+                        } else {
+                            alert('no Type !!');
+                        }
+                    });
+                },
+                tagMsg : function($el) {
+                    console.log($el);
+                    return $el[0].tagName;
+                }
+            }
+       };
+
+        var af = alertFactory();
+        af.addTargetElement($('#btnAlert'), 'tag');
+    });
+</script>
+<body>
+    <button id="btnAlert">alert</button>
+</body>
+</html>

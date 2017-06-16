@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://code.jquery.com/jquery-1.12.3.min.js"></script>
+    <script src="parsley.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+</head>
+<body>
+<!-- data-parsley-errors-messages-disabled-->
+<form id="demo-form" data-parsley-errors-messages-disabled>
+    <!--<div class="select mr10">
+        <select id="_CATEGORY_1" name="CATEGORY_1" data-parsley-required="true" data-parsley-error-message="1차분류를 선택해 주세요.">
+            <option value="">1차 분류</option>
+            <option value="POI">POI(주요지명)</option>
+            <option value="POS">POS(이야기)</option>
+            <option value="POR">POR(안전정보)</option>
+            <option value="POP">POP(포토존)</option>
+            <option value="POE">POE(이벤트행사)</option>
+            <option value="POV">POV(볼거리)</option>
+        </select>
+    </div>-->
+    <input type="text" placeholder="제목" data-parsley-required="true" />
+    <input type="text" placeholder="제목" data-parsley-required="true" />
+    <input type="text" placeholder="제목" data-parsley-required="true" />
+
+</form>
+<button id="btnValidate" >Test</button>
+
+<script type="text/javascript">
+    $(function () {
+        var $p = $("#demo-form").parsley();
+
+        /*window.Parsley.addValidator('phoneValidate', {
+            validateString: function(value, requirement, instance) {
+                var ret = /^\d{3}-\d{3,4}-\d{4}$/.test(value);
+
+                if(!ret) {
+
+                    $(instance.$element[0]).attr('data-parsley-error-message', '전화번호 확인 필요');
+                }
+
+                return ret;
+            }
+        });*/
+
+        $("#btnValidate").click(function() {
+            var v = $("#demo-form").parsley().validate();
+            console.log($("#demo-form").parsley());
+            console.log($("#demo-form").parsley()._focusedField[0]);
+            console.log($(this).parsley());
+            //console.log($($("#demo-form").parsley()._focusedField[0]).attr('data-parsley-error-message'))
+
+
+            var focusedField = $("#demo-form").parsley()._focusedField[0];
+//            console.log(focusedField)
+            $.each($("#demo-form").parsley().fields, function(idx, o) {
+                if(_.isArray(o.validationResult)) {
+//                    console.log(o.$element);
+                    if(o.$element[0] === focusedField) {
+                        console.log(ParsleyUI.getErrorsMessages(o));
+                        alert("같다");
+                        return;
+                    }
+                }
+            });
+
+            event.preventDefault();
+        });
+
+        $.listen('parsley:field:error', function(fieldInstance){
+//            console.log(fieldInstance);
+            // loads all error messages for the current field in an array
+            var arrErrorMsg = ParsleyUI.getErrorsMessages(fieldInstance);
+
+            // implodes the array elements into a string separated by ;
+            var errorMsg = arrErrorMsg.join(';');
+
+            // access the DOM element and retrieve the attribute name
+            var fieldName = fieldInstance.$element.attr('name');
+            //console.log(fieldInstance.parent);
+            //var focusElem = fieldInstance.parent._focusedField[0];
+            //var errorElem = fieldInstance.$element[0];
+
+            //console.log(focusElem);
+            //console.log(errorElem);
+
+            //console.log(foucsElem === errorElem);
+
+            // display the field name and error list in an alert message
+           // alert('Errors for field ' + fieldName + ': ' + errorMsg);
+        });
+    });
+</script>
+</body>
+</html>

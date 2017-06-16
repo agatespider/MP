@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8"/>
+		<title>Mini Ajax File Upload Form</title>
+
+		<!-- Google web fonts -->
+		<link href="http://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700" rel='stylesheet' />
+
+		<!-- The main CSS file -->
+		<link href="assets/css/style.css" rel="stylesheet" />
+	</head>
+
+	<body>
+
+		<form id="upload" method="post" action="upload.php" enctype="multipart/form-data">
+			<div id="drop">
+				Drop Here
+
+				<a>Browse</a>
+				<input type="file" name="upl" multiple />
+			</div>
+
+			<ul>
+				<!-- File Upload Drag&Drop위치 -->
+			</ul>
+		</form>
+
+		<footer>
+            <h2><a href="http://tutorialzine.com/2013/05/mini-ajax-file-upload-form/"><i>Tutorial:</i> Mini Ajax File Upload Form</a></h2>
+            <div id="tzine-actions">
+            	
+	            <a id="tzine-download" href="http://tutorialzine.com/2013/05/mini-ajax-file-upload-form/" title="Download This Example!">Download</a>
+            </div>
+        </footer>
+        
+		<!-- JavaScript Includes -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="assets/js/jquery.knob.js"></script>
+
+		<!-- jQuery File Upload Dependencies -->
+		<script src="assets/js/jquery.ui.widget.js"></script>
+		<script src="assets/js/jquery.iframe-transport.js"></script>
+		<script src="assets/js/jquery.fileupload.js"></script>
+
+		<!-- Only used for the demos. Please ignore and remove. --> 
+        <script src="http://cdn.tutorialzine.com/misc/enhance/v1.js" async></script>
+
+
+        <script>
+            $(function(){
+                var ul = $('#upload ul');
+
+                $('#drop a').click(function() {
+                    $(this).parent().find('input').click();
+                });
+
+                // Initialize the jQuery File Upload plugin
+                $('#upload').fileupload({
+                    // This element will accept file drag/drop uploading (Drop할 공간)
+                    dropZone: $('#drop'),
+                    // This function is called when a file is added to the queue either via the browse button, or via drag/drop:
+                    add: function (e, data) {
+                        console.log(data);
+                        var tpl = $('<li class="working"><input type="text" value="0" data-width="48" data-height="48"'+
+                            ' data-fgColor="#0788a5" data-readOnly="1" data-bgColor="#3e4043" /><p></p><span></span></li>');
+
+                        // Append the file name and file size
+                        tpl.find('p').text(data.files[0].name)
+                            .append('<i>' + formatFileSize(data.files[0].size) + '</i>');
+
+                        // Add the HTML to the UL element
+                        data.context = tpl.appendTo(ul);
+
+                        // Initialize the knob plugin
+                        tpl.find('input').knob();
+
+                        // Listen for clicks on the cancel icon
+                        tpl.find('span').click(function() {
+                            if(tpl.hasClass('working')){
+                                jqXHR.abort();
+                            }
+
+                            tpl.fadeOut(function(){
+                                tpl.remove();
+                            });
+                        });
+
+                        // Automatically upload the file once it is added to the queue
+                        var jqXHR = data.submit();
+                    },
+                    progress: function(e, data){
+                        // Calculate the completion percentage of the upload
+                        var progress = parseInt(data.loaded / data.total * 100, 10);
+
+                        // Update the hidden input field and trigger a change
+                        // so that the jQuery knob plugin knows to update the dial
+                        data.context.find('input').val(progress).change();
+
+                        if(progress == 100) {
+                            data.context.removeClass('working');
+                        }
+                    },
+                    fail:function(e, data){
+                        // Something has gone wrong!
+                        data.context.addClass('error');
+                    }
+                });
+
+
+                // Prevent the default action when a file is dropped on the window
+                $(document).on('drop dragover', function (e) {
+                    e.preventDefault();
+                });
+
+                // Helper function that formats the file sizes
+                function formatFileSize(bytes) {
+                    if (typeof bytes !== 'number') {
+                        return '';
+                    }
+
+                    if (bytes >= 1000000000) {
+                        return (bytes / 1000000000).toFixed(2) + ' GB';
+                    }
+
+                    if (bytes >= 1000000) {
+                        return (bytes / 1000000).toFixed(2) + ' MB';
+                    }
+
+                    return (bytes / 1000).toFixed(2) + ' KB';
+                }
+
+            });
+        </script>
+	</body>
+</html>
